@@ -167,7 +167,7 @@
                     \item a = Auflagerreaktion
                     \item p = Anzahl Stabelemente
                     \item k = Knotenanzahl \\ (alle Knotenpunkte, inkl. Auflager, Gelenke etc. auch feste Rahmenecken, keine freien Stabenden)
-                    \item r = Anzahl Stäbe pro Knotenpunkte -1 (nur Gelenkknoten)
+                    \item r = Anzahl Stäbe pro Knotenpunkte -1 (nur Gelenkknoten, aber auch gelenkige Auflager)
                 \end{itemize}
 
             \item Maximale Anzahl Fließgelenke bis kinematische Kette:\\
@@ -187,16 +187,16 @@
                 $\delta_{10}, \delta_{20}, \delta_{30}, \delta_{11}, \delta_{22}, \delta_{33}, \delta_{12}, \delta_{13}, \delta_{23}$ ; $\delta_{23} \hateq \delta_{32}$  \\
                 $\nu = \int_x \frac{\Bar{M} \cdot M}{EI} dx$
             \item Elastizitätsgleichung:\\
-                \begin{minipage}{0.50\textwidth}
-                    $ \begin{bmatrix} \delta_{11} & \delta_{12} & \delta_{13} \\  & \delta_{22} & \delta_{23} \\ sym &  & \delta_{33} \end{bmatrix}  
+                \begin{minipage}{0.45\textwidth}
+                    $ \begin{bmatrix} \delta_{11} & \delta_{12} & \delta_{13} \\ \ldots & \delta_{22} & \delta_{23} \\ sym & \ldots  & \delta_{33} \end{bmatrix}  
                     \cdot
                     \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix}
                     =
                     \begin{bmatrix} \delta_{10} \\ \delta_{20} \\ \delta_{30} \end{bmatrix}
                     \rightarrow x = \begin{bmatrix} \ldots \\ \ldots \\ \ldots \end{bmatrix}$
                 \end{minipage}
-                \begin{minipage}{0.50\textwidth}
-                    $\hateq$ Momente an eingefügten Momentengelenken, quasi Faktor zum überlagern Momentenverläufe\\
+                \begin{minipage}{0.55\textwidth}
+                    $\hateq$ Momente an eingefügten Momentengelenken, \\ quasi Faktor zum überlagern Momentenverläufe\\
                 Bei letzten Lastschritt: $x_1 = - \frac{\delta_{10}}{\delta_{11}}$
                 \end{minipage}
                  
@@ -216,7 +216,7 @@
                 \end{enumerate}
             \item Gesamter Traglastfaktor: $\nu_T = \nu_1 + \Delta \nu_2 + ...$ \\
                 Momentenverlauf im Traglastzustand = letzter Momentenverlauf \\
-                $\rightarrow M_T = M_1 + \Delta \nu_2 \cdot \Delta M_2 (M_1 = \Delta \nu_1 \cdot M_0 ; M_2 = M_0)$
+                $\rightarrow M_T = M_0 + \Delta \nu_1 \cdot \Delta M_1 + \Delta \nu_2 \cdot \Delta M_2$
             \item Verschiebung:
                 \begin{itemize}
                     \item System vor Eintreten letztes FG
@@ -235,8 +235,10 @@
 
     \subsection{Verschiebung nach Entlastung} 
         \begin{itemize}
-            \item $M_3 = M_{1(\nu_1)}$ ; $\nu_1 = \nu_T$
-            \item $\Bar{1}$-Verschiebung an gesuchten Lager aufbringen und mit $M_E$ überlagern (4.36 + 4.38)
+            \item Entlastungsmomentenverlauf: $M_E = M_{1(\nu_T)} \hateq M_1 \cdot \left( \frac{-\nu_T}{\nu_1} \right) $
+            \item Restmoment: $M_V = M_T + M_E $
+            \item Restverschiebung: $ f_v = f_T + f_E $
+            \item Entlastungsverschiebung: $ f_E = \Bar{1}$-Verschiebung an gesuchten Lager aufbringen und mit $M_E$ überlagern (Schneider 4.36 + 4.38)
         \end{itemize}
         
 \section{KKK - Kombination kinematischer Ketten}
@@ -259,8 +261,9 @@
                         \item $z=FG -$ 'statische Bestimmtheit'
                         \item $FG$ ablesen, nicht brechnen
                     \end{itemize}
-                \item Knotenketten: oft biegesteife Knoten
-                \item Rahmenketten: ein Stab verschiebt sich
+                \item Trägerketten: Im Feld belastete Elemente
+                \item Knotenketten: An biegesteifen Knoten
+                \item Rahmenketten: Ein Stab verschiebt sich
             \end{itemize}
         \end{minipage}
         \begin{minipage}{0.5\textwidth}
@@ -268,7 +271,7 @@
         \end{minipage}
 
         
-    \subsection{Ermittlung der plastischen Grenzlast}
+    \subsection{Ermittlung der plastischen Grenzlast (Verfahren mit Tabelle)}
         \begin{enumerate}
             \item $r=2\cdot m +m_F - m_G$
                 \begin{itemize}
@@ -292,7 +295,7 @@
             \item Für jede Elementarkette obere Schranke $P_{k i n}$ bestimmen.
             \item Addition von Elementarketten, so dass
                 \begin{itemize}  \item Äußere Arbeit $A_a$ möglichst groß \item Innere Arbeit $A_i$ möglichst klein \item $\nu_T=\frac{A_i}{A_a} \rightarrow \min$ \end{itemize}
-                Dies ist am besten zu erreichen, wenn sich bei der Kombination der Elementarketten plastische Gelenke wieder aufheben. (Die Kombinationskette darf nur einen Freiheitsgrad aufweisen.)
+                Dies ist am Besten zu erreichen, wenn sich bei der Kombination der Elementarketten plastische Gelenke wieder aufheben. (Die Kombinationskette darf nur einen Freiheitsgrad aufweisen.)
             \item Kontrolle: $\|M\| \leq M_{p l}$\\
                 Damit ist der statische Satz erfüllt und die plastische Grenzlast ist eindeutig bestimmt. Falls $\|M\| \leq M_{p l}$ nicht erfüllt ist, neue Kombinationskette wählen.
             \item Anzahl der möglichen Kombinationen $l=2^z-1$
@@ -312,45 +315,72 @@
     \subsection{Tabellarische Kombination kinematische Ketten}
         \includegraphics[scale = 0.55]{Grafiken/KombinationElementarketten.pdf}
 
-\section{VV nach Theorie II. Ordnung}
+\section{Prinzip virtueller Verschiebungen nach Theorie II. Ordnung}
     \begin{itemize}
-        \item Stabhennzahl: $\alpha= L \sqrt{S/EI}$
-        \item Druchleraffe aud Unoten $\rightarrow$ Knotenvedrehung audbringen
-        \item Linienlasten aud Stab $\rightarrow$ Verdrehung an Einspanmang daneben
-        \item Einzellasten führen zur Verschicbung des Sustems
-        \item Anbringen wo Fliekgelente oder Verschicbungen audtreten honnen Ls stat. Unbestimmtheit+1
+        \item Druckkräfte aud Knoten $\rightarrow$ Knotenvedrehung aufbringen
+        \item Linienlasten aud Stab $\rightarrow$ Verdrehung an Einspannung daneben
+        \item Einzellasten führen zur Verschiebung des Systems
+        \item Anbringen wo Fließgelenke oder Verschiebungen auftreten können 
+            \begin{itemize}
+                \item Anzahl: statische Unbestimmtheit +1
+            \end{itemize}
         \item Bei komplexeren Verschiebungen die Gelenkfigur zeichnen
     \end{itemize}
 
     \subsection{Ablauf}
         \begin{enumerate}
             \item Geometrisch bestimmtes Grundsystem aufzeichnen
-            \item Nullzustand: Lasten an $r_{1-n}$ berechnen
-            \item Lastzustände $r^1=1 ; r^2=1 ; r^3=1 ; \ldots$ anbringen
                 \begin{itemize}
-                    \item $GGW$ am eingefügte Knoten aufstellen $\rightarrow K_n$ für Knoten
-                    \item Eingefügte Lager mit PVV berechnen $\rightarrow K_n$ für Auflager
-                    \item Eingefügte Lager mit PVV berechnen $\rightarrow K_n$ für Auflager
-                        \begin{itemize}
-                            \item Quasi Summe (Kraft $\cdot$ Wirkung) resultierende Vertikal/Horizontalkräfte
-                            \item Wirkung zum berechnen z.B. Kraft $r_2$ aus Verschiebungsfigur zu $r_2$
-                                \begin{itemize}
-                                    \item Querkraft $\cdot$ Verschiebungsfigur
-                                    \item Moment $\cdot$ Verdrehung
-                                    \item Normalkraft $\cdot$ $\varphi$ $\cdot$ Verschiebung\\
-                                        (Verschiebung aus Lastzustand ; $\varphi$ aus Gelenkfigur)
-                                    \item Drehfeder: $c_F$ $\cdot$ Verdrehung
-                                    \item Wegfeder: $k_F$ $\cdot$ Verschiebung
-                                \end{itemize}
-                            \item $K$ oder $z$: unbekannte Knotengrößen
-                        \end{itemize}
+                    \item An statisch überbestimmten Stellen Auflager und $r_n$-Last in überbestimmte Richtung auftragen
                 \end{itemize}
-            \item $GGW$ (Bsp.): $\begin{aligned} & U_1=M_2+M_3 \\ & U_2=M_4 \\ & U_3=0\end{aligned}$
-            \item $PVV \text{(Bsp.)}: r^4=1: 1 \cdot K_4-\frac{1}{L_1}\left(M_1+M_2\right)$\\
-                $\rightarrow$ Auf welche Knoten/Stabkräfte hat Verschiebung Einfluss (für alle eingefügten Auflager durchführen)\\ \\
-                \includegraphics[scale=0.1]{Grafiken/Ablauf VV.jpg}\\
-                Zu III): Aus Tafeln für Theorie 1. Ordnung oder Theorie 2. Ordnung\\
-                PVV: P-$\Delta$-Effekt nur beachten in Zustand mit tatsächlicher Translation
+            \item Vorwerte berechnen: Für alle C' berechnen
+                \begin{itemize}
+                    \item Für beidseitig eingespannte: A' und B'
+                    \item Für mit Randmoment belastet: A' und B'
+                    \item Für mit Streckenlast belastet: A'
+                \end{itemize}
+            \item Gelenkfigur/Verschiebungsfigur zeichnen
+            \item Stabkennzahl für Druckstäbe (-) berechnen: $\alpha= L \sqrt{S/EI}$
+            \item Lastzustand: Lasten im stat. bestimmten Grundsystem an $r_0$ berechnen
+            \item Einheitszustände $r^1=1 ; r^2=1 ; r^3=1 ; \ldots$ als Verschiebung anbringen
+                \begin{enumerate}
+                    \item Alle Momente aus Verdrehungen auftragen (mit Tafeln)
+                    \item Alle Transversalkräfte aus Verschiebungen auftragen (mit Tafeln)
+                        \begin{itemize}
+                            \item $V_{ki} = V_{ki,0} + \frac{M_{ki} + M_{ik}}{l} + \frac{S}{l} \Delta$
+                            \item $\Delta = \frac{w_i - w_k}{l}$
+                        \end{itemize}
+                    \item Mit Momentengleichgewicht um eingebrachte Momentengelenke diese bestimmen
+                    \item Mit PVV eingebrachte Verschiebungen bestimmen:
+                        \begin{itemize}
+                            \item Summe aller angreifender Kräfte $\cdot$ Wirkung 
+                                \begin{itemize}
+                                    \item $K$: unbekannte Knotengrößen
+                                    \item Normalkraft $\cdot$ Verschiebung$_{\text{(Gelenkfigur)}}$ $\cdot$  $\varphi_{\text{(Einheitszustand)}}$
+                                    \item Querkraft $\cdot$ Verschiebung$_{\text{(Gelenkfigur)}} \cdot$ Verschiebung$_{\text{(Einheitszustand)}}$
+                                    \item Moment$_{\text{(Einheitszustand)}}$ $\cdot$ Verdrehung$_{\text{(Gelenkfigur)}}$
+                                    \item Drehfeder: $c_F$ $\cdot$ Verdrehung$_{\text{(Noch klären, Gelenkfigur oder Einheitszustand)}}$
+                                    \item Wegfeder: $k_F$ $\cdot$ Verschiebung $_{\text{(Noch klären, Gelenkfigur oder Einheitszustand)}}$
+                                    \item Stauchung/Dehnung lastfreier Stab: $EA \cdot \varepsilon_{\text{(Einheitszustand)}}$
+                                \end{itemize}
+
+                        \end{itemize}
+                \end{enumerate}
+         %   \item $GGW$ (Bsp.): 
+         %   \begin{itemize}
+          %      \item $U_1=M_2+M_3$
+           %     \item $U_2=M_4$
+            %    \item $U_3=0$
+          %  \end{itemize}
+           % \item $PVV$ (Bsp.):
+            %    \begin{itemize}
+             %       \item $r^4=1:$ \hspace{2mm} $1 \cdot K_4-\frac{1}{L_1}\left(M_1+M_2\right)$
+              %      \item Auf welche Knoten-/Stabkräfte hat Verschiebung Einfluss 
+               %     \item Für alle eingefügten Auflager durchführen
+            %    \end{itemize}
+             %   \includegraphics[scale=0.1]{Grafiken/Ablauf VV.jpg}\\
+             %   Zu III): Aus Tafeln für Theorie 1. Ordnung oder Theorie 2. Ordnung\\
+             %   PVV: P-$\Delta$-Effekt nur beachten in Zustand mit tatsächlicher Translation
             %Die nächsten Zeilen sind wirklich hässlich programmiert, aber passt ja zu dem elendigen Fach 
             \item Kompabilitätsbedingungen aufstellen:\vskip 2mm
                 $ \begin{smallmatrix} \phantom{r_1} \\\begin{matrix}  K_1 \\ K_2 \\ K_3 \\ K_4 \\ K_5 \end{matrix} \end{smallmatrix}$ 
@@ -364,14 +394,24 @@
                             \item $z = r_1,r_2,r_3,r_4,r_5$ aus Nullzustand
                             \item Negative Normalkraft (Druck) wirkt Steifigkeitsmindernd $\rightarrow$ Wird in Gleichung auf K-Tensor addiert
                         \end{itemize}
+            \item Mit $r_i$ neue Verschiebungsfiguren berechnen; reale Verschiebungen, Dechnung/Stauchung berechenbar
+            
            \item Momentenverlauf während Lastschritt n
                 \begin{itemize}
                     \item $M = M^{(\text{n-1})} + \sum_k r^i \cdot M^k$\\
                         (Moment im Grundzustand (stat. bestimmt) $+ r_1 \cdot M_1 + r_2 \cdot M_2$)
+                    \item Bsp.: 
+                    $$\begin{bmatrix} M_{12} \\ M_{21} \\ M_{23} \\M_{34}\end{bmatrix}
+                    =
+                    \begin{bmatrix} M_{12}^0 \\ M_{21}^0 \\ M_{23}^0 \\M_{34}^0\end{bmatrix}
+                    + r_1 \cdot\begin{bmatrix} M_{12}^1 \\ M_{21}^1 \\ M_{23}^1 \\M_{34}^1\end{bmatrix}
+                    + r_2 \cdot\begin{bmatrix} M_{12}^2 \\ M_{21}^2 \\ M_{23}^2 \\M_{34}^2\end{bmatrix}
+                    + \ldots + r_n \cdot\begin{bmatrix} M_{12}^n \\ M_{21}^n \\ M_{23}^n \\M_{34}^n\end{bmatrix}
+                    $$
                     \item $M^k$: Momente an eingefügten Stellen zu $r_1 = 1; r_2 = 1; \ldots$
                 \end{itemize}
-            \item Fließgelenk einfügen \& $M_{pl}$ antragen
-            \item Partiell Kompabilitätsbedingungen ausrechnen
+            \item Fließgelenk einfügen \& $M_{pl}$ antragen (KEINE AHNUNG WAS DAS HEIßEN SOLL)
+            \item Partiell Kompabilitätsbedingungen ausrechnen (KEINE AHNUNG WAS DAS HEIßEN SOLL)
         \end{enumerate}
 
     \subsection{Entlastung}
